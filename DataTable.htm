@@ -16,18 +16,17 @@
         <div>
             <table id="dtexample" border="1px" cellpadding="0px" width="auto" cellspacing="0px">
                 <thead id="headD">
-                    <tr>
-                    </tr>
+                    <tr></tr>
+                    <tr></tr>
                 </thead>
-                <tbody id="dataD" runat="server">
-                </tbody>
+                <tbody id="dataD" runat="server"></tbody>
             </table>
             <script type="text/javascript">
                 var mdataArray = [];
                 var ColumnData;
                 var table;
                 var defaultcol = "";
-                //get Table and Columns properties 
+                //get Table and Columns properties
                 function getTableMeta() {
                     $.ajax({
                         type: 'POST',
@@ -37,10 +36,17 @@
                             console.log(data);
                             ColumnData = data.Column;
                             $.each(data.Column, function (index, element) {
-                                    $('#dtexample thead tr:first-child').append($('<th>', {
+                                $('#dtexample thead tr:first-child').append($('<th>', {
+                                    text: element.Name
+                                }));
+                                if (element.Searchable == true)
+                                    $('#dtexample thead tr:nth-child(2)').append($('<th>', {
                                         text: element.Name
                                     }));
-                                    mdataArray.push({ mData: element.Name, class: element.Name });
+                                else $('#dtexample thead tr:nth-child(2)').append($('<th>', {
+                                    text: ''
+                                }));
+                                mdataArray.push({ mData: element.Name, class: element.Name });
                             });
                             defaultcol = data.Column[0].Name;
                             //once table headers and table data property set, initialize DT
@@ -53,33 +59,58 @@
                 });
 
                 function initializeDataTable() {
-                   
+                    //put Input textbox for filtering
+                    $('#dtexample thead tr:nth-child(2) th').each(function () {
+                        var title = $(this).text();
+                        if (title != '')
+                            $(this).html('<input type="text" class="sorthandle" style="width:100%;" />');
+                    });
+                    //don't sort when user clicks on input textbox to type for filter
+                    $('#dtexample').find('thead th').click(function (event) {
+                        if ($(event.target).hasClass('sorthandle')) {
+                            event.stopImmediatePropagation()
+                        }
+                    });
                     table = $('#dtexample').DataTable({
                         "ajax": {
-                            "url": "/WebService.asmx/GetIncentiveMap",
+                            "url": "/WebService.asmx/GetTableData",
                             "type": "POST",
                             data: function (data) {
                                 editIndexTable = -1;
-                                 var colname;
+                                var colname;
                                 var sort = data.order[0].column;
                                 if (!data['columns'][sort]['data'] == '')
                                     colname = data['columns'][sort]['data'] + ' ' + data.order[0].dir;
                                 //in case no sorted col is there, sort by first col
-                                else colname = defaultcol+" asc";
+                                else colname = defaultcol + " asc";
                                 var colarr = [];
                                 //  colname = 'ID asc';
                                 var colfilter, col;
                                 var arr = {
                                     'draw': data.draw, 'length': data.length,
-                                    'sort': colname, 'start': data.start
+                                    'sort': colname, 'start': data.start, 'search': data.search.value
                                 };
-                              
+                                //add each column as formdata key/value for filtering
+                                data['columns'].forEach(function (items, index) {
+                                    col = data['columns'][index]['data'];
+                                    colfilter = data['columns'][index]['search']['value'];
+                                    arr[col] = colfilter;
+                                });
                                 return arr;
                             }
-                        }, 
-                        "lengthMenu": [10, 50, 100],"searching":false,
+                        },
+                        "lengthMenu": [10, 50, 100], "searching": true,
                         serverSide: true, "processing": true,
                         aoColumns: mdataArray
+                    });
+                    //call search api when user types in filter input
+                    table.columns().every(function () {
+                        var that = this;
+                        $('input', this.header()).on('keyup change', function () {
+                            if (that.search() !== this.value) {
+                                that.search(this.value).draw();
+                            }
+                        });
                     });
                 }
             </script>
