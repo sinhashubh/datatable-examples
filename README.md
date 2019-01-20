@@ -1,5 +1,5 @@
 # datatable-examples
-Using DataTables plug-in for jQuery. 
+Using DataTables plug-in for jQuery https://datatables.net
 
 Having functionalities such as : 
 1. Search
