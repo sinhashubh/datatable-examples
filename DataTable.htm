@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Datatable Example</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui" />
+    <link rel="Stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+    <link rel="Stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.jqueryui.min.css" />
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/dataTables.jqueryui.min.js"></script>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <table id="dtexample" border="1px" cellpadding="0px" width="auto" cellspacing="0px">
+                <thead id="headD">
+                    <tr>
+                    </tr>
+                </thead>
+                <tbody id="dataD" runat="server">
+                </tbody>
+            </table>
+            <script type="text/javascript">
+                var mdataArray = [];
+                var ColumnData;
+                var table;
+                var defaultcol = "";
+                //get Table and Columns properties 
+                function getTableMeta() {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/WebService.asmx/GetTableMeta',
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log(data);
+                            ColumnData = data.Column;
+                            $.each(data.Column, function (index, element) {
+                                    $('#dtexample thead tr:first-child').append($('<th>', {
+                                        text: element.Name
+                                    }));
+                                    mdataArray.push({ mData: element.Name, class: element.Name });
+                            });
+                            defaultcol = data.Column[0].Name;
+                            //once table headers and table data property set, initialize DT
+                            initializeDataTable();
+                        }
+                    });
+                }
+                $(document).ready(function () {
+                    getTableMeta();
+                });
+
+                function initializeDataTable() {
+                   
+                    table = $('#dtexample').DataTable({
+                        "ajax": {
+                            "url": "/WebService.asmx/GetIncentiveMap",
+                            "type": "POST",
+                            data: function (data) {
+                                editIndexTable = -1;
+                                 var colname;
+                                var sort = data.order[0].column;
+                                if (!data['columns'][sort]['data'] == '')
+                                    colname = data['columns'][sort]['data'] + ' ' + data.order[0].dir;
+                                //in case no sorted col is there, sort by first col
+                                else colname = defaultcol+" asc";
+                                var colarr = [];
+                                //  colname = 'ID asc';
+                                var colfilter, col;
+                                var arr = {
+                                    'draw': data.draw, 'length': data.length,
+                                    'sort': colname, 'start': data.start
+                                };
+                              
+                                return arr;
+                            }
+                        }, 
+                        "lengthMenu": [10, 50, 100],"searching":false,
+                        serverSide: true, "processing": true,
+                        aoColumns: mdataArray
+                    });
+                }
+            </script>
+        </div>
+    </form>
+</body>
+</html>
