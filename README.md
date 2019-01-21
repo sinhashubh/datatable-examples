@@ -9,3 +9,5 @@ Having functionalities such as :
 5. Edit Multiple Rows
 6. Fix Column/s
 7. Custom Coloring
+
+Demo : http://eunoia.gq
