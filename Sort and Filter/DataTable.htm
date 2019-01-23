@@ -23,7 +23,6 @@
             </table>
             <script type="text/javascript">
                 var mdataArray = [];
-                var EditRowData = [];
                 var ColumnData;
                 var table;
                 var defaultcol = "";
@@ -31,7 +30,7 @@
                 function getTableMeta() {
                     $.ajax({
                         type: 'POST',
-                        url: '/WebService.asmx/GetTableMeta',
+                        url: 'http://eunoia.gq/WebService.asmx/GetTableMeta',
                         dataType: 'json',
                         success: function (data) {
                             console.log(data);
@@ -58,10 +57,7 @@
                 $(document).ready(function () {
                     getTableMeta();
                 });
-                $(document).keyup(function (e) {
-                    if (e.keyCode == 27)
-                            cancelBtn();
-                });
+
                 function initializeDataTable() {
                     //put Input textbox for filtering
                     $('#dtexample thead tr:nth-child(2) th').each(function () {
@@ -104,8 +100,6 @@
                             }
                         },
                         "lengthMenu": [10, 50, 100], "searching": true,
-                        //rowId required when doing update, can put any unique value for each row instead of ID
-                        rowId: 'ID',
                         serverSide: true, "processing": true,
                         aoColumns: mdataArray
                     });
@@ -118,104 +112,7 @@
                             }
                         });
                     });
-                    var onEditClickcls = '';
-                    $.each(ColumnData, function (index, element) {
-                        if (element.Editable == true) {
-                            onEditClickcls += 'tr td.' + element.Name + ',';
-                        }
-                    });
-                    onEditClickcls = onEditClickcls.substring(0, onEditClickcls.length - 1);
-                    console.log(onEditClickcls);
-                    $("#dtexample tbody").on('click', onEditClickcls, function (e) {
-                        if ($(e.target).is('input') || $(e.target).is('img') || $(e.target).is('span.copyAll')) {
-                            e.preventDefault();
-                            return;
-                        }
-                        RoweditMode($(this).parent());
-                    });
-                    $("#dtexample tbody").on('keyup', 'input.userinput', function (e) {
-                        if (e.keyCode == 13) {
-                                updateRowData(this.parentNode.parentNode);
-                        }
-                    });
                 }
-                var editIndexTable = -1;
-                function RoweditMode(rowid) {
-                    var prevRow;
-                    var rowIndexVlaue = parseInt(rowid.attr("indexv"));
-                    if (editIndexTable == -1) {
-                        saveRowIntoArray(rowid);
-                        rowid.attr("editState", "editState");
-                        editIndexTable = rowid.rowIndex;
-                        setEditStateValue(rowid, rowIndexVlaue + 2);
-                    }
-                    else {
-                        prevRow = $("[editState=editState]");
-                        prevRow.attr("editState", "");
-                        rowid.attr("editState", "editState");
-                        editIndexTable = rowIndexVlaue;
-                        saveArrayIntoRow(prevRow);
-                        saveRowIntoArray(rowid);
-                        setEditStateValue(rowid, rowIndexVlaue + 2);
-                    }
-                }
-                function setEditStateValue(td1, indexRow) {
-                    for (var k in EditRowData) {
-                        $($(td1).children('.' + k)[0]).html('<input value="' + EditRowData[k] + '" class="userinput"  style="width: 99% " />');
-                    }
-                }
-                function cancelBtn() {
-                    var prevRow = $("[editState=editState]");
-                    prevRow.attr("editState", "");
-                    if (prevRow.length > 0) { saveArrayIntoRow($(prevRow)); }
-                    editIndexTable = -1;
-                }
-                function saveRowIntoArray(cureentCells) {
-                    $.each(ColumnData, function (index, element) {
-                        if (element.Editable == true) {
-                            var htmlVal = $($(cureentCells).children('.' + element.Name)[0]).html();
-                            EditRowData[element.Name] = htmlVal;
-                        }
-                    });
-                }
-                function saveArrayIntoRow(cureentCells) {
-                    for (var k in EditRowData) {
-                        $($(cureentCells).children('.' + k)[0]).html(EditRowData[k]);
-                    }
-                }
-                function updateRowData(currentCells) {
-                    var table = $("#dtexample").DataTable();
-                    var row = table.row(currentCells);
-                    rowid = currentCells.getAttribute('id');
-                    var UpdateRowData = [];
-
-                    $.each(ColumnData, function (index, element) {
-                        if (element.Editable==true) {
-                            UpdateRowData.push({
-                                'pname': element.Name , 'pvalue': $($($(currentCells).children('.' + element.Name)).children('input')[0]).val()
-                            });
-                        }
-                    });
-                    console.log(UpdateRowData);
-                    UpdateRowData.push({ 'pname': 'rowid', 'pvalue': rowid });
-                    var parameter = "";
-                    for (i = 0; i < UpdateRowData.length; i++) {
-                        if (i == UpdateRowData.length - 1)
-                            parameter = parameter + UpdateRowData[i].pname + "=" + UpdateRowData[i].pvalue;
-                        else
-                            parameter = parameter + UpdateRowData[i].pname + "=" + UpdateRowData[i].pvalue + "&";
-                    }
-                    $.ajax({
-                        type: 'POST',
-                        url: '/WebService.asmx/UpdateTableData',
-                        data: parameter,
-                        success: function (data) {
-                            var table = $('#dtexample').DataTable();
-                            table.draw('page');
-                        }
-                    });
-                }
-               
             </script>
         </div>
     </form>
