@@ -12,7 +12,7 @@ Having functionalities such as :
 8. Column Visibility
 9. Multiple Header Rows (With/Without Colspan)
 
-Demo : http://eunoia.gq
+<a href="http://eunoia.gq" target="_blank">Demo Here</a>
 
 # Example of Table Meta format that should be returned by GetTableMeta request
 
