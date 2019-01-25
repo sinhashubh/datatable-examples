@@ -1,5 +1,8 @@
 # datatable-examples
 Using DataTables plug-in for jQuery https://datatables.net
+https://webchat.freenode.net/ #askDT
+
+Join the disucssion chatroom for this project our Webchat Channel Name [https://webchat.freenode.net/] *askDT*
 
 Having functionalities such as : 
 1. Search
