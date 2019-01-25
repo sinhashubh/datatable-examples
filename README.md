@@ -2,7 +2,7 @@
 Using DataTables plug-in for jQuery https://datatables.net
 https://webchat.freenode.net/ #askDT
 
-Join the disucssion chatroom for this project our [Webchat Channel](https://webchat.freenode.net/) : askDT
+Join the disucssion chatroom for this project on [Webchat Channel](https://webchat.freenode.net/) : askDT
 
 Having functionalities such as : 
 1. Search
