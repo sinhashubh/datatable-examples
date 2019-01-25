@@ -3,6 +3,8 @@ Using DataTables plug-in for jQuery https://datatables.net
 
 Join the disucssion chatroom for this project on [Webchat Channel](https://webchat.freenode.net/) : askDT
 
+We're doing this mainly because we needed below functionalities for many pages and wanted it to be dynamic so we'll only have to change serverside.
+
 Having functionalities such as : 
 1. Search
 2. Sort
