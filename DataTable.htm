@@ -271,8 +271,8 @@
                         for (var k in filterednames[0]) {
                             $($(that).children('.' + k)[0]).html(filterednames[0][k]);
                         }
-
                     });
+                    isEditAllState = false;
                     $('#editallbtn').css('display', 'inline-block');
                     $('#canceleditallbtn').css('display', 'none');
                     $('#saveallbtn').css('display', 'none');
