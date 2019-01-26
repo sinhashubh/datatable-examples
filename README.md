@@ -6,11 +6,11 @@ Join the disucssion chatroom for this project on [Webchat Channel](https://webch
 We're doing this mainly because we needed below functionalities for many pages and wanted it to be dynamic so we'll only have to change serverside.
 
 Having functionalities such as : 
-1. Search
-2. Sort
+1. Search ✅
+2. Sort ✅
 3. Expand Row
-4. Edit Row (Inline)
-5. Edit Multiple Rows (Inline)
+4. Edit Row (Inline) ✅
+5. Edit Multiple Rows (Inline) ✅
 6. Fix Column/s
 7. Custom Coloring
 8. Column Visibility
