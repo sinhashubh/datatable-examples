@@ -21,7 +21,6 @@
                     <tr></tr>
                 </thead>
                 <tbody id="dataD" runat="server"></tbody>
-                <tfoot> <tr> </tr></tfoot>
             </table>
             <script type="text/javascript">
                 var mdataArray = [];
@@ -43,17 +42,6 @@
                                 $('#dtexample thead tr:first-child').append($('<th>', {
                                     text: element.Name
                                 }));
-                                //insert
-                                if (data.Insertable == true) {
-                                if (element.Editable == true) {
-                                    $('#dtexample tfoot tr:first-child').append($('<td><input class="' + element.Name + 'Add" style="width: 99% " type="text" /></td>'
-                                    ));
-                                } else {
-                                    $('#dtexample tfoot tr:first-child').append($('<td></td>'
-                                    ));
-                                    }
-                                }
-                                //search
                                 if (element.Searchable == true)
                                     $('#dtexample thead tr:nth-child(2)').append($('<th>', {
                                         text: element.Name
@@ -63,20 +51,6 @@
                                 }));
                                 mdataArray.push({ mData: element.Name, class: element.Name });
                             });
-                            if (data.Deletable == true) {
-                                $('#dtexample thead tr:first-child').append($('<th>', {
-                                    text: 'Delete'
-                                }));
-                                $('#dtexample thead tr:nth-child(2)').append($('<th>', {
-                                    text: ''
-                                }));
-                                mdataArray.push({ defaultContent: '<span class="deleteBtn">Del</span>', class: 'DeleteRow' });
-                               
-                            }
-                            if (data.Insertable == true) {
-                                $('#dtexample tfoot tr:first-child').append($('<td><span class="insertBtn">Add</span></td>'
-                                ));
-                            }
                             defaultcol = data.Column[0].Name;
                             //once table headers and table data property set, initialize DT
                             initializeDataTable();
@@ -175,20 +149,6 @@
                         } 
                         RoweditMode($(this).parent());
                     });
-
-                    //for delete button
-                    $("#dtexample tbody").on('click', 'tr td span.deleteBtn', function (e) {
-                      //  RoweditMode($(this).parent().parent());
-                        deleteRow(this.parentNode.parentNode);
-                    });
-
-                    //for insert button
-                    $("#dtexample tfoot").on('click', 'tr td span.insertBtn', function (e) {
-                        //  RoweditMode($(this).parent().parent());
-                        insertRowData(this.parentNode.parentNode);
-                    });
-
-
                     $("#dtexample tbody").on('keyup', 'input.userinput', function (e) {
 
                         if (e.keyCode == 13) {
@@ -327,54 +287,6 @@
                     $('#saveallbtn').css('display', 'none');
                 }
 
-                //Delete 
-                function deleteRow(currentCells) {
-                    var table = $("#dtexample").DataTable();
-                    var row = table.row(currentCells);
-                    rowid = currentCells.getAttribute('id');
-                    $.ajax({
-                        type: 'POST',
-                        url: '/WebService.asmx/DeleteTableData',
-                        data: 'rowid='+rowid,
-                        success: function (data) {
-                            var table = $('#dtexample').DataTable();
-                            table.draw('page');
-                        }
-                    });
-
-                }
-
-                //insert row
-                function insertRowData(currentCells) {
-                    var table = $("#dtexample").DataTable();
-                    var row = table.row(currentCells);
-                    var InsertRowData = [];
-                    console.log(currentCells);
-                    $.each(ColumnData, function (index, element) {
-                        InsertRowData.push({
-                            'pname': element.Name, 'pvalue': $($($(currentCells).children('.' + element.Name )).children('input.' + element.Name + 'Add')[0]).val()
-                            });
-                        
-                    });
-
-                   
-                    var parameter = "";
-                    for (i = 0; i < InsertRowData.length; i++) {
-                        if (i == InsertRowData.length - 1)
-                            parameter = parameter + InsertRowData[i].pname + "=" + InsertRowData[i].pvalue;
-                        else
-                            parameter = parameter + InsertRowData[i].pname + "=" + InsertRowData[i].pvalue + "&";
-                    }
-                    $.ajax({
-                        type: 'POST',
-                        url: '/WebService.asmx/InsertTableData',
-                        data: parameter,
-                        success: function (data) {
-                            var table = $('#dtexample').DataTable();
-                            table.draw('page');
-                        }
-                    });
-                }
             </script>
         </div>
     </form>
