@@ -45,12 +45,12 @@
                                 }));
                                 //insert
                                 if (data.Insertable == true) {
-                                    if (element.Editable == true) {
-                                        $('#dtexample tfoot tr:first-child').append($('<td><input class="' + element.Name + 'Add" style="width: 99% " type="text" /></td>'
-                                        ));
-                                    } else {
-                                        $('#dtexample tfoot tr:first-child').append($('<td></td>'
-                                        ));
+                                if (element.Editable == true) {
+                                    $('#dtexample tfoot tr:first-child').append($('<td><input class="' + element.Name + 'Add" style="width: 99% " type="text" /></td>'
+                                    ));
+                                } else {
+                                    $('#dtexample tfoot tr:first-child').append($('<td></td>'
+                                    ));
                                     }
                                 }
                                 //search
@@ -71,7 +71,7 @@
                                     text: ''
                                 }));
                                 mdataArray.push({ defaultContent: '<span class="deleteBtn">Del</span>', class: 'DeleteRow' });
-
+                               
                             }
                             if (data.Insertable == true) {
                                 $('#dtexample tfoot tr:first-child').append($('<td><span class="insertBtn">Add</span></td>'
@@ -86,7 +86,7 @@
                 }
                 $(document).ready(function () {
                     getTableMeta();
-
+                   
                 });
                 $(document).keyup(function (e) {
                     if (e.keyCode == 27)
@@ -143,7 +143,6 @@
                         dom: '<"toolbar">frtip',
                         initComplete: function () {
                             $("div.toolbar").html('<a href="#" style="margin: 5px" class="btn  btn-info btn-secondary" id="editallbtn" onclick="EditAll()">Edit All</a>' +
-                                '<a href="#" style="margin: 5px" class="btn  btn-info btn-secondary" id="deleteallbtn" onclick="deleteAllRows()">Delete All</a>' +
                                 '<a href="#" class="btn  btn-info btn-secondary" style="display: none;margin: 5px" id="saveallbtn" onclick="SaveAll()">Save</a>'
                                 + '<a href="#" class="btn  btn-info btn-secondary" style="display: none;margin: 5px" id="canceleditallbtn" onclick="CancelEditAll()">Cancel</a>');
 
@@ -151,7 +150,7 @@
                         serverSide: true, "processing": true,
                         aoColumns: mdataArray
                     });
-
+                    
                     //call search api when user types in filter input
                     table.columns().every(function () {
                         var that = this;
@@ -173,13 +172,13 @@
                         if ($(e.target).is('input') || $(e.target).is('img') || $(e.target).is('span.copyAll') || isEditAllState) {
                             e.preventDefault();
                             return;
-                        }
+                        } 
                         RoweditMode($(this).parent());
                     });
 
                     //for delete button
                     $("#dtexample tbody").on('click', 'tr td span.deleteBtn', function (e) {
-                        //  RoweditMode($(this).parent().parent());
+                      //  RoweditMode($(this).parent().parent());
                         deleteRow(this.parentNode.parentNode);
                     });
 
@@ -253,9 +252,9 @@
                     var UpdateRowData = [];
 
                     $.each(ColumnData, function (index, element) {
-                        if (element.Editable == true) {
+                        if (element.Editable==true) {
                             UpdateRowData.push({
-                                'pname': element.Name, 'pvalue': $($($(currentCells).children('.' + element.Name)).children('input')[0]).val()
+                                'pname': element.Name , 'pvalue': $($($(currentCells).children('.' + element.Name)).children('input')[0]).val()
                             });
                         }
                     });
@@ -278,8 +277,8 @@
                         }
                     });
                 }
+               //Edit All
 
-                //Edit All
                 var EditAllData = [];
                 function EditAll() {
                     cancelBtn();
@@ -328,7 +327,7 @@
                     $('#saveallbtn').css('display', 'none');
                 }
 
-                //Delete
+                //Delete 
                 function deleteRow(currentCells) {
                     var table = $("#dtexample").DataTable();
                     var row = table.row(currentCells);
@@ -336,21 +335,11 @@
                     $.ajax({
                         type: 'POST',
                         url: '/WebService.asmx/DeleteTableData',
-                        data: 'rowid=' + rowid,
+                        data: 'rowid='+rowid,
                         success: function (data) {
                             var table = $('#dtexample').DataTable();
                             table.draw('page');
                         }
-                    });
-
-                }
-                //delete all
-                function deleteAllRows() {
-                    $('#dtexample tbody tr').each(function () {
-                        varrowid = this.getAttribute('id');
-                        var that = this;
-                        deleteRow(that);
-                       
                     });
 
                 }
@@ -363,12 +352,12 @@
                     console.log(currentCells);
                     $.each(ColumnData, function (index, element) {
                         InsertRowData.push({
-                            'pname': element.Name, 'pvalue': $($($(currentCells).children('.' + element.Name)).children('input.' + element.Name + 'Add')[0]).val()
-                        });
-
+                            'pname': element.Name, 'pvalue': $($($(currentCells).children('.' + element.Name )).children('input.' + element.Name + 'Add')[0]).val()
+                            });
+                        
                     });
 
-
+                   
                     var parameter = "";
                     for (i = 0; i < InsertRowData.length; i++) {
                         if (i == InsertRowData.length - 1)
