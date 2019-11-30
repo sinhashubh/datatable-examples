@@ -14,7 +14,7 @@ Having functionalities such as :
 8. Column Visibility
 9. Multiple Header Rows (With/Without Colspan)
 
-<a href="http://eunoia.gq/datatable.htm" target="_blank">Demo Here</a>
+<a href="http://eleuthromaniac.gq/DataTable.htm" target="_blank">Demo Here</a>
 
 ## Example of Table Meta format that should be returned by GetTableMeta request
 
