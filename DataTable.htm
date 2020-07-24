@@ -30,11 +30,12 @@
                 var table;
                 var isEditAllState = false;
                 var defaultcol = "";
+                var apiUrl='https://dtexample.000webhostapp.com/api/';
                 //get Table and Columns properties
                 function getTableMeta() {
                     $.ajax({
                         type: 'POST',
-                        url: '/WebService.asmx/GetTableMeta',
+                        url: apiUrl+'gettablemeta.php',
                         dataType: 'json',
                         success: function (data) {
                             console.log(data);
@@ -111,7 +112,7 @@
                     });
                     table = $('#dtexample').DataTable({
                         "ajax": {
-                            "url": "/WebService.asmx/GetTableData",
+                            "url": apiUrl+"gettabledata.php",
                             "type": "POST",
                             data: function (data) {
                                 editIndexTable = -1;
@@ -270,7 +271,7 @@
                     }
                     $.ajax({
                         type: 'POST',
-                        url: '/WebService.asmx/UpdateTableData',
+                        url: apiUrl+'update.php',
                         data: parameter,
                         success: function (data) {
                             var table = $('#dtexample').DataTable();
@@ -335,7 +336,7 @@
                     rowid = currentCells.getAttribute('id');
                     $.ajax({
                         type: 'POST',
-                        url: '/WebService.asmx/DeleteTableData',
+                        url: apiUrl+'delete.php',
                         data: 'rowid=' + rowid,
                         success: function (data) {
                             var table = $('#dtexample').DataTable();
@@ -346,6 +347,7 @@
                 }
                 //delete all
                 function deleteAllRows() {
+                    if(confirm("Are you sure you want to delete filtered rows?"))
                     $('#dtexample tbody tr').each(function () {
                         varrowid = this.getAttribute('id');
                         var that = this;
@@ -378,7 +380,7 @@
                     }
                     $.ajax({
                         type: 'POST',
-                        url: '/WebService.asmx/InsertTableData',
+                        url: apiUrl+'create.php',
                         data: parameter,
                         success: function (data) {
                             var table = $('#dtexample').DataTable();
