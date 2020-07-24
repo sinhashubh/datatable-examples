@@ -1,6 +1,8 @@
 # datatable-customized
 Using DataTables plug-in for jQuery https://datatables.net
 
+<a href="https://dtexample.000webhostapp.com/DataTable.htm" target="_blank">Demo</a>
+
 Having functionalities such as : 
 1. Search ✅
 2. Sort ✅
