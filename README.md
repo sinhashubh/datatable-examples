@@ -15,7 +15,7 @@ Having functionalities such as :
 8. Column Visibility (in progress)
 9. Multiple Header Rows (With/Without Colspan) (in progress)
 
-All you have to do is put the Datatable.htm and dt-custom.js in your website and handle required requests in API.
+All you have to do is put the Datatable.htm and dt-custom.js in your website, change the API and endpoint URL's and handle required requests in API.
 
 
 ## Example of Table Meta format that should be returned by GetTableMeta request
