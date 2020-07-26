@@ -4,12 +4,18 @@ var ColumnData;
 var table;
 var isEditAllState = false;
 var defaultcol = "";
-var apiUrl = 'https://dtexample.000webhostapp.com/api/';
+
+var apiUrl = 'https://dtexample.000webhostapp.com/api/';//Url for Server API
+var GetTableMetaApiEndpoint ='gettablemeta.php';//Endpoint returning Table Metadata
+var GetTableDataApiEndpoint ='gettabledata.php';//Endpoint processing and return Table Data
+var UpdateRowDataApiEndpoint ='update.php';//Endpoint processing update request
+var InsertRowDataApiEndpoint ='create.php';//Endpoint processing insert request
+var DeleteRowDataApiEndpoint ='delete.php';//Endpoint processing delete request
 //get Table and Columns properties
 function getTableMeta() {
     $.ajax({
         type: 'POST',
-        url: apiUrl + 'gettablemeta.php',
+        url: apiUrl + GetTableMetaApiEndpoint,
         dataType: 'json',
         success: function (data) {
             console.log(data);
@@ -86,7 +92,7 @@ function initializeDataTable() {
     });
     table = $('#dtexample').DataTable({
         "ajax": {
-            "url": apiUrl + "gettabledata.php",
+            "url": apiUrl + GetTableDataApiEndpoint,
             "type": "POST",
             data: function (data) {
                 editIndexTable = -1;
@@ -245,7 +251,7 @@ function updateRowData(currentCells) {
     }
     $.ajax({
         type: 'POST',
-        url: apiUrl + 'update.php',
+        url: apiUrl + UpdateRowDataApiEndpoint,
         data: parameter,
         success: function (data) {
             var table = $('#dtexample').DataTable();
@@ -310,7 +316,7 @@ function deleteRow(currentCells) {
     rowid = currentCells.getAttribute('id');
     $.ajax({
         type: 'POST',
-        url: apiUrl + 'delete.php',
+        url: apiUrl + DeleteRowDataApiEndpoint,
         data: 'rowid=' + rowid,
         success: function (data) {
             var table = $('#dtexample').DataTable();
@@ -354,7 +360,7 @@ function insertRowData(currentCells) {
     }
     $.ajax({
         type: 'POST',
-        url: apiUrl + 'create.php',
+        url: apiUrl + InsertRowDataApiEndpoint,
         data: parameter,
         success: function (data) {
             var table = $('#dtexample').DataTable();
