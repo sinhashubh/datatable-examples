@@ -51,11 +51,11 @@ function getTableMeta() {
                 $('#dtexample thead tr:nth-child(2)').append($('<th>', {
                     text: ''
                 }));
-                mdataArray.push({ defaultContent: '<span class="deleteBtn"><img src="./icons/delete.png" style="width:28px" /></span>', class: 'DeleteRow' });
+                mdataArray.push({ defaultContent: '<span class="deleteBtn"><img src="./Icons/delete.png" style="width:28px" /></span>', class: 'DeleteRow' });
 
             }
             if (data.Insertable == true) {
-                $('#dtexample tfoot tr:first-child').append($('<td><span class="insertBtn"><img src="./icons/add.png" style="width:28px" /></span></td>'
+                $('#dtexample tfoot tr:first-child').append($('<td><span class="insertBtn"><img src="./Icons/add.png" style="width:28px" /></span></td>'
                 ));
             }
             defaultcol = data.Column[0].Name;
