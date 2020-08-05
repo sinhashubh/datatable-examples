@@ -28,7 +28,7 @@ function getTableMeta() {
                 $('#dtexample thead tr:nth-child(2)').append($('<th>', {
                     text: ''
                 }));
-                mdataArray.push({ defaultContent: '<img src="./icons/delete.png" style="width:28px" />', class: 'details-control' });
+                mdataArray.push({ defaultContent: '<img src="./Icons/openview.png" style="width:28px" />', class: 'details-control' });
                 InitializeFormatter();
             }
             //End for Expand Row
@@ -388,7 +388,6 @@ function InitializeFormatter() {
             tr.removeClass();
             // This row is already open - close it
             row.child.hide();
-            tr.find('td:nth-child(1) img').attr("src", "/images/add.png");
         }
         else {
             // Open this row
