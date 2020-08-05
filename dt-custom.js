@@ -6,11 +6,11 @@ var isEditAllState = false;
 var defaultcol = "";
 
 var apiUrl = 'https://dtexample.000webhostapp.com/api/';//Url for Server API
-var GetTableMetaApiEndpoint ='gettablemeta.php';//Endpoint returning Table Metadata
-var GetTableDataApiEndpoint ='gettabledata.php';//Endpoint processing and return Table Data
-var UpdateRowDataApiEndpoint ='update.php';//Endpoint processing update request
-var InsertRowDataApiEndpoint ='create.php';//Endpoint processing insert request
-var DeleteRowDataApiEndpoint ='delete.php';//Endpoint processing delete request
+var GetTableMetaApiEndpoint = 'gettablemeta.php';//Endpoint returning Table Metadata
+var GetTableDataApiEndpoint = 'gettabledata.php';//Endpoint processing and return Table Data
+var UpdateRowDataApiEndpoint = 'update.php';//Endpoint processing update request
+var InsertRowDataApiEndpoint = 'create.php';//Endpoint processing insert request
+var DeleteRowDataApiEndpoint = 'delete.php';//Endpoint processing delete request
 //get Table and Columns properties
 function getTableMeta() {
     $.ajax({
@@ -20,6 +20,18 @@ function getTableMeta() {
         success: function (data) {
             console.log(data);
             ColumnData = data.Column;
+            //Below for Expand Row
+            if (data.hasOwnProperty('Expandable') && data.Expandable == true) {
+                $('#dtexample thead tr:first-child').append($('<th>', {
+                    text: 'Expand'
+                }));
+                $('#dtexample thead tr:nth-child(2)').append($('<th>', {
+                    text: ''
+                }));
+                mdataArray.push({ defaultContent: '<img src="./icons/delete.png" style="width:28px" />', class: 'details-control' });
+                InitializeFormatter();
+            }
+            //End for Expand Row
             $.each(data.Column, function (index, element) {
                 $('#dtexample thead tr:first-child').append($('<th>', {
                     text: element.Name
@@ -367,4 +379,41 @@ function insertRowData(currentCells) {
             table.draw('page');
         }
     });
+}
+function InitializeFormatter() {
+    $('#dtexample tbody').on('click', 'td.details-control', function () {
+        var tr = $(this).closest('tr');
+        var row = table.row(tr);
+        if (row.child.isShown()) {
+            tr.removeClass();
+            // This row is already open - close it
+            row.child.hide();
+            tr.find('td:nth-child(1) img').attr("src", "/images/add.png");
+        }
+        else {
+            // Open this row
+            tr.addClass("thisRowShown");
+            var histrows = format(row.data());
+            row.child($(histrows)).show();
+        }
+    });
+}
+function format(d) {
+    // `d` is the original data object for the row
+    var b = '<tr class="gridlistCss">' +
+        '<td></td>' +
+        '<td class="dt-center">' + d.ID + '</td>' +
+        '<td class="dt-center">' + d.ORD_NUM + '</td>' +
+        '<td class="dt-center">' + d.ORD_AMOUNT + '</td>' +
+        '<td class="dt-center">' + d.ADVANCE_AMOUNT + '</td>' +
+        '<td class="dt-center">' + d.ORD_DATE + '</td>' +
+        '<td class="dt-center">' + d.AGENT_CODE + '</td>' +
+        '<td class="dt-center">' + d.CUST_CODE + '</td>' +
+        '<td class="dt-center">' + d.ORD_DESCRIPTION + '</td>' +
+        '<td class="dt-center"></td>' +
+        '</tr>';
+
+    var final = b;//comment this to expand with div
+    //final="<div><span>One span in DIV"+d.ORD_NUM+"</span></div>";//comment this to show data in Table format
+    return final;
 }
