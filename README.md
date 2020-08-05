@@ -7,7 +7,7 @@ This is Server-side processing(<a href="https://www.datatables.net/examples/data
 Having functionalities such as : 
 1. Search ✅
 2. Sort ✅
-3. Expand Row (in progress)
+3. Expand Row ✅
 4. Edit Row (Inline) ✅
 5. Edit Multiple Rows (Inline) ✅
 6. Fix Column/s (in progress)
@@ -46,6 +46,7 @@ Applicable if 'Deletable' property of table is set to true. In that case, a new 
 ```javascript
 Form Data : rowid=19
 ```
+## For Expand Row, make changes in "format" function as needed.
 
 >Other than these, user will have the option to update all or delete all. For example, user searches the table for certain rows and want to edit them all at once, in that case, user will click the 'Edit All' button and all filtered rows will be changed to textboxes. Once user enters details as needed, they can click the save button right next to 'Edit All' and multiple UpdateRowData requests are called and handled by the API.
 In case, user wants to delete certain rows, they can click 'Delete All' button and multiple DeleteRowData requests will be created and handled by the API.
