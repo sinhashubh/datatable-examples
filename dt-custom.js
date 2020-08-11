@@ -30,6 +30,9 @@ function getTableMeta() {
                 }));
                 mdataArray.push({ defaultContent: '<img src="./Icons/openview.png" style="width:28px" />', class: 'details-control' });
                 InitializeFormatter();
+                if (data.Insertable == true) {
+                $('#dtexample tfoot tr:first-child').append($('<td></td>'));
+                }
             }
             //End for Expand Row
             $.each(data.Column, function (index, element) {
