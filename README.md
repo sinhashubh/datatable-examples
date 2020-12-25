@@ -32,9 +32,9 @@ This request is main request which will return data from API and handle global s
 {"draw":1,"recordsTotal":34,"recordsFiltered":34,"data":[{"ID":1,"ORD_NUM":"200100","ORD_AMOUNT":"1000","ADVANCE_AMOUNT":"600","ORD_DATE":"8/1/2008 12:00:00 AM","CUST_CODE":"C00013","AGENT_CODE":"A003  ","ORD_DESCRIPTION":"TYU"},{"ID":2,"ORD_NUM":"200101","ORD_AMOUNT":"3212","ADVANCE_AMOUNT":"1000","ORD_DATE":"7/15/2008 12:00:00 AM","CUST_CODE":"C00001","AGENT_CODE":"A008  ","ORD_DESCRIPTION":"TYU"}]}
 ```
 ## Example of UpdateRowData request that should be handled appropriately on Server's side 
-Applicable if 'Editable' properties of column/s is set to true. In that case, on click on the column data in rows, the column/s will change to textbox and user can edit and save(by pressing enter). All columns are sent to API in POST request and API can run update on particular rowid.
+Applicable if 'Editable' properties of column/s is set to true. In that case, on click on the column data in rows, the column/s will change to textbox and user can edit and save(by pressing enter). All columns are sent to API in POST request (JSON Array of Object) and API can run update as needed.
 ```javascript
-Form Data : ORD_NUM=200103&ORD_AMOUNT=15001&ADVANCE_AMOUNT=700&ORD_DATE=5/15/2008 12:00:00 AM&CUST_CODE=C00021&AGENT_CODE=A005&ORD_DESCRIPTION=SODe&rowid=4
+Form Data : [{"ORD_NUM":"200103","ORD_AMOUNT":"15001","ADVANCE_AMOUNT":"700","ORD_DATE":"5/15/2008 12:00:00 AM","CUST_CODE":"C00021","AGENT_CODE":"A005","ORD_DESCRIPTION":"SODA","rowid":"4"}]
 ```
 ## Example of InsertRowData request that should be handled appropriately on Server's side 
 Applicable if 'Insertable' property of table is set to true. In that case, footer will have textboxes for all columns and user can insert and save(by clicking add). All columns are sent to API in POST request and API can insert the data.
@@ -42,9 +42,9 @@ Applicable if 'Insertable' property of table is set to true. In that case, foote
 Form Data : ORD_NUM=200103&ORD_AMOUNT=15001&ADVANCE_AMOUNT=700&ORD_DATE=5/15/2008 12:00:00 AM&CUST_CODE=C00021&AGENT_CODE=A005&ORD_DESCRIPTION=SOD4
 ```
 ## Example of DeleteRowData request that should be handled appropriately on Server's side 
-Applicable if 'Deletable' property of table is set to true. In that case, a new delete column will be added to table and user can click for any row they want to delete. rowid is sent to API in POST request and API can delete the row.
+Applicable if 'Deletable' property of table is set to true. In that case, a new delete column will be added to table and user can click for any row they want to delete. rowid is sent to API in POST request(JSON Array of Object) and API can delete the row/s.
 ```javascript
-Form Data : rowid=19
+Form Data : [{"rowid":"35"}]
 ```
 ## For Expand Row, make changes in "format" function as needed.
 

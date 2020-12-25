@@ -247,27 +247,23 @@ function updateRowData(currentCells) {
     var row = table.row(currentCells);
     rowid = currentCells.getAttribute('id');
     var UpdateRowData = [];
-
+    var aoColss = {}
     $.each(ColumnData, function (index, element) {
         if (element.Editable == true) {
-            UpdateRowData.push({
-                'pname': element.Name, 'pvalue': $($($(currentCells).children('.' + element.Name)).children('input')[0]).val()
-            });
+            aoColss[element.Name] = $($($(currentCells).children('.' + element.Name)).children('input')[0]).val();
         }
     });
-    console.log(UpdateRowData);
-    UpdateRowData.push({ 'pname': 'rowid', 'pvalue': rowid });
-    var parameter = "";
-    for (i = 0; i < UpdateRowData.length; i++) {
-        if (i == UpdateRowData.length - 1)
-            parameter = parameter + UpdateRowData[i].pname + "=" + UpdateRowData[i].pvalue;
-        else
-            parameter = parameter + UpdateRowData[i].pname + "=" + UpdateRowData[i].pvalue + "&";
-    }
+    aoColss['rowid'] =rowid;
+    UpdateRowData.push(aoColss);
+    UpdateData(UpdateRowData);
+}
+
+//Update
+function UpdateData(jsonUpdate) {
     $.ajax({
         type: 'POST',
         url: apiUrl + UpdateRowDataApiEndpoint,
-        data: parameter,
+        data: JSON.stringify(jsonUpdate),
         success: function (data) {
             var table = $('#dtexample').DataTable();
             table.draw('page');
@@ -315,24 +311,56 @@ function CancelEditAll() {
     $('#saveallbtn').css('display', 'none');
 }
 function SaveAll() {
-    $('#dtexample tbody tr').each(function () {
-        updateRowData(this);
+        var UpdateRowData = [];
+    $('#dtexample tbody tr').each(function (indx, currentRow) {
+        rowid = this.getAttribute('id');
+        var aoColss = {}
+        $.each(ColumnData, function (index, element) {
+            if (element.Editable == true) {
+                aoColss[element.Name] = $($($(currentRow).children('.' + element.Name)).children('input')[0]).val();
+            }
+        });
+        aoColss['rowid'] =rowid;
+        UpdateRowData.push(aoColss);
     });
+    UpdateData(UpdateRowData);
     isEditAllState = false;
     $('#editallbtn').css('display', 'inline-block');
     $('#canceleditallbtn').css('display', 'none');
     $('#saveallbtn').css('display', 'none');
 }
 
-//Delete
+//Delete current row
 function deleteRow(currentCells) {
     var table = $("#dtexample").DataTable();
-    var row = table.row(currentCells);
     rowid = currentCells.getAttribute('id');
+    jsonDelete=[{rowid: rowid}];
+    deleteData(jsonDelete);
+
+}
+//delete all
+function deleteAllRows() {
+    if (confirm("Are you sure you want to delete filtered rows?")){
+        jsonDelete=[];
+        $('#dtexample tbody tr').each(function () {
+            varrowid = this.getAttribute('id');
+            // var that = this;
+            // var table = $("#dtexample").DataTable();
+    //var row = table.row(currentCells);
+    // rowid = currentCells.getAttribute('id');
+    jsonDelete.push({rowid: varrowid});
+
+        });
+        deleteData(jsonDelete);
+    }
+
+}
+//delete
+function deleteData(jsonDelete) {
     $.ajax({
         type: 'POST',
         url: apiUrl + DeleteRowDataApiEndpoint,
-        data: 'rowid=' + rowid,
+        data: JSON.stringify(jsonDelete),
         success: function (data) {
             var table = $('#dtexample').DataTable();
             table.draw('page');
@@ -340,18 +368,6 @@ function deleteRow(currentCells) {
     });
 
 }
-//delete all
-function deleteAllRows() {
-    if (confirm("Are you sure you want to delete filtered rows?"))
-        $('#dtexample tbody tr').each(function () {
-            varrowid = this.getAttribute('id');
-            var that = this;
-            deleteRow(that);
-
-        });
-
-}
-
 //insert row
 function insertRowData(currentCells) {
     var table = $("#dtexample").DataTable();
