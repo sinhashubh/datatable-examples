@@ -51,6 +51,8 @@ Form Data : [{"rowid":"35"}]
 >Other than these, user will have the option to update all or delete all. For example, user searches the table for certain rows and want to edit them all at once, in that case, user will click the 'Edit All' button and all filtered rows will be changed to textboxes. Once user enters details as needed, they can click the save button right next to 'Edit All' and multiple UpdateRowData requests are called and handled by the API.
 In case, user wants to delete certain rows, they can click 'Delete All' button and multiple DeleteRowData requests will be created and handled by the API.
 
+## You can check server side API implementations below :
+<a href="https://github.com/sinhashubh/datatables-php-api" target="_blank">PHP API Example</a>
 
 
 
