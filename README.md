@@ -53,6 +53,7 @@ In case, user wants to delete certain rows, they can click 'Delete All' button a
 
 ## You can check server side API implementations below :
 <a href="https://github.com/sinhashubh/datatables-php-api" target="_blank">PHP API Example</a>
+<a href="https://github.com/sinhashubh/datatables-netcore-api" target="_blank">Dot Net Core API Example</a>
 
 
 
