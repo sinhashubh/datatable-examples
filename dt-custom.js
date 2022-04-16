@@ -5,7 +5,7 @@ var table;
 var isEditAllState = false;
 var defaultcol = "";
 
-var apiUrl = 'https://dtexample.000webhostapp.com/api/';//Url for Server API
+var apiUrl = 'https://dtexample7.000webhostapp.com/api/';//Url for Server API
 var GetTableMetaApiEndpoint = 'gettablemeta.php';//Endpoint returning Table Metadata
 var GetTableDataApiEndpoint = 'gettabledata.php';//Endpoint processing and return Table Data
 var UpdateRowDataApiEndpoint = 'update.php';//Endpoint processing update request
