@@ -6,6 +6,7 @@ var isEditAllState = false;
 var defaultcol = "";
 
 var apiUrl = 'https://dtexample7.000webhostapp.com/api/';//Url for Server API
+var backupApiUrl = 'https://dtexample8.000webhostapp.com/api/';//Url for Server API
 var GetTableMetaApiEndpoint = 'gettablemeta.php';//Endpoint returning Table Metadata
 var GetTableDataApiEndpoint = 'gettabledata.php';//Endpoint processing and return Table Data
 var UpdateRowDataApiEndpoint = 'update.php';//Endpoint processing update request
@@ -14,9 +15,9 @@ var DeleteRowDataApiEndpoint = 'delete.php';//Endpoint processing delete request
 //get Table and Columns properties
 function getTableMeta() {
     $.ajax({
-        type: 'POST',
+        type: 'GET',
         url: apiUrl + GetTableMetaApiEndpoint,
-        dataType: 'json',
+
         success: function (data) {
             console.log(data);
             ColumnData = data.Column;
@@ -31,7 +32,7 @@ function getTableMeta() {
                 mdataArray.push({ defaultContent: '<img src="./Icons/openview.png" style="width:28px" />', class: 'details-control' });
                 InitializeFormatter();
                 if (data.Insertable == true) {
-                $('#dtexample tfoot tr:first-child').append($('<td></td>'));
+                    $('#dtexample tfoot tr:first-child').append($('<td></td>'));
                 }
             }
             //End for Expand Row
@@ -77,7 +78,14 @@ function getTableMeta() {
             //once table headers and table data property set, initialize DT
             initializeDataTable();
 
-        }
+        },
+        error: function (xhr, status, error) {
+
+            if (apiUrl != backupApiUrl) {
+                apiUrl = backupApiUrl;
+                getTableMeta();
+            }
+        },
     });
 }
 $(document).ready(function () {
@@ -253,7 +261,7 @@ function updateRowData(currentCells) {
             aoColss[element.Name] = $($($(currentCells).children('.' + element.Name)).children('input')[0]).val();
         }
     });
-    aoColss['rowid'] =rowid;
+    aoColss['rowid'] = rowid;
     UpdateRowData.push(aoColss);
     UpdateData(UpdateRowData);
 }
@@ -311,7 +319,7 @@ function CancelEditAll() {
     $('#saveallbtn').css('display', 'none');
 }
 function SaveAll() {
-        var UpdateRowData = [];
+    var UpdateRowData = [];
     $('#dtexample tbody tr').each(function (indx, currentRow) {
         rowid = this.getAttribute('id');
         var aoColss = {}
@@ -320,7 +328,7 @@ function SaveAll() {
                 aoColss[element.Name] = $($($(currentRow).children('.' + element.Name)).children('input')[0]).val();
             }
         });
-        aoColss['rowid'] =rowid;
+        aoColss['rowid'] = rowid;
         UpdateRowData.push(aoColss);
     });
     UpdateData(UpdateRowData);
@@ -334,21 +342,21 @@ function SaveAll() {
 function deleteRow(currentCells) {
     var table = $("#dtexample").DataTable();
     rowid = currentCells.getAttribute('id');
-    jsonDelete=[{rowid: rowid}];
+    jsonDelete = [{ rowid: rowid }];
     deleteData(jsonDelete);
 
 }
 //delete all
 function deleteAllRows() {
-    if (confirm("Are you sure you want to delete filtered rows?")){
-        jsonDelete=[];
+    if (confirm("Are you sure you want to delete filtered rows?")) {
+        jsonDelete = [];
         $('#dtexample tbody tr').each(function () {
             varrowid = this.getAttribute('id');
             // var that = this;
             // var table = $("#dtexample").DataTable();
-    //var row = table.row(currentCells);
-    // rowid = currentCells.getAttribute('id');
-    jsonDelete.push({rowid: varrowid});
+            //var row = table.row(currentCells);
+            // rowid = currentCells.getAttribute('id');
+            jsonDelete.push({ rowid: varrowid });
 
         });
         deleteData(jsonDelete);
